@@ -1,6 +1,6 @@
 <?php namespace PHRETS;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\CookieJarInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -42,7 +42,7 @@ class Session
         $defaults = [];
 
         // start up our Guzzle HTTP client
-        $this->client = PHRETSClient::make($defaults);
+        $this->setClient(PHRETSClient::make($defaults));
 
         $this->cookie_jar = new CookieJar;
 
@@ -502,13 +502,21 @@ class Session
     }
 
     /**
-     * @return Client
+     * @return GuzzleClientInterface
      */
     public function getClient()
     {
         return $this->client;
     }
 
+    /**
+     * @param GuzzleClientInterface $client
+     */
+    public function setClient(GuzzleClientInterface $client)
+    {
+        $this->client = $client;
+    }
+    
     /**
      * @return mixed
      */
